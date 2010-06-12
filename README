@@ -1,0 +1,44 @@
+===== textodo.php =====
+
+Simplistic 1 file AJAX text based organizer.
+
+===== Installation =====
+
+1. Copy textodo.php to web accessible folder.
+2. Edit textodo.php and set correct configuration.
+3. Create DB tables:
+
+CREATE TABLE `textodo_lines` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `line` TEXT,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `textodo_user` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) DEFAULT NULL,
+  `passhash` VARCHAR(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_passhash` (`username`,`passhash`)
+);
+
+4. Add users:
+
+INSERT INTO `textodo_user` (`username`, `passhash`) VALUES ('demo', md5('demo'));
+
+===== Running =====
+
+* Point your browser to http://yourdomain.com/textodo.php
+
+* Works well with Android and iPhone browsers.
+
+* Filter Examples:
+
+Term - single term search
+@context - special characters allowed
+#tag1 #tag2 - search for records with both terms
+#project1 -#done - search for records except ones starting with minus
+term1 space+separated+term2 - to search for multi-word terms use plus
+
+* Filtered results can be bookmarked, query is stored in URL fragment.

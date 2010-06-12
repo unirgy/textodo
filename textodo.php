@@ -7,9 +7,9 @@ error_reporting(E_ALL | E_STRICT);
 $config = array(
     'db' => array(
         'host' => 'localhost',
-        'user' => 'web',
+        'user' => 'root',
         'pass' => '',
-        'name' => 'unirgy_sales',
+        'name' => 'dbname',
     ),
     'rate' => array(
         'query' => 300,
@@ -267,12 +267,6 @@ function login_form() {
             <input type="submit" value="Login" />
         </fieldset>
     </form>
-
-    <ul>
-    <li>Try demo/demo login.</li>
-    <li>Filter Examples: "Term", "@context", "#tag1 #tag2", "#project1 -#done", "term1 space+separated+term2"</li>
-    <li>Filtered results can be bookmarked</li>
-    </ul>
 <?php
     html_footer();
 }
