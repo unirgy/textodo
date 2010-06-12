@@ -1,10 +1,15 @@
 ===== textodo.php =====
 
-Simplistic 1 file AJAX text based organizer.
+Simplistic single file AJAX text based organizer.
+
+===== License =====
+
+This software is subject to the Open Software License (OSL 3.0)
+http://opensource.org/licenses/osl-3.0.php
 
 ===== Installation =====
 
-1. Copy textodo.php to web accessible folder.
+1. Copy textodo.php, README and LICENSE files to web accessible folder.
 2. Edit textodo.php and set correct configuration.
 3. Create DB tables:
 
