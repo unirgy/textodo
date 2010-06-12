@@ -47,3 +47,10 @@ Term - single term search
 term1 space+separated+term2 - to search for multi-word terms use plus
 
 * Filtered results can be bookmarked, query is stored in URL fragment.
+
+===== Demo =====
+
+http://unirgy.com/t
+
+Username: demo
+Password: demo
