@@ -165,12 +165,16 @@ function html_header() {
 
 * { font-family:Arial; font-size:10pt; }
 
+#login-form input { line-height:1.5em; height:1.5em; font-size:12pt; }
+
 fieldset { border:0; }
 #query { width:200px; border:solid 1px #888; }
 
 #result-form ul { list-style-type:none; margin:0; padding:0; }
 #result-form input { border-style:dotted; border-color:#888; border-width:0 0 1px 0; width:100%; }
 /*#result-form input.new-line { background:#DDD; }*/
+
+#user-info { text-align:center; }
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript">
@@ -283,11 +287,11 @@ function login_form() {
 <?php if (!empty($_REQUEST['error'])): ?>
     <div class="error-msg"><?php echo htmlspecialchars($_REQUEST['error']) ?></div>
 <?php endif ?>
-    <form method="post">
+    <form name="login-form" method="post">
         <fieldset>
-            <label for="username">User name: <br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label><br/>
-            <label for="password">Password: <br /><input type="password" name="password" value="" /></label><br />
-            <input type="submit" value="Login" />
+            <p><label for="username">User name: <br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label></p>
+            <p><label for="password">Password: <br /><input type="password" name="password" value="" /></label></p>
+            <p><input type="submit" value="Login" /></p>
         </fieldset>
     </form>
 <?php
@@ -297,7 +301,6 @@ function login_form() {
 function main_page() {
     html_header();
 ?>
-    Welcome, <?php echo $_SESSION['user']['username'] ?>. <a href="?r=logout">Log out</a>
     <form id="search-form">
         <fieldset>
             <label for="query">Filter: <input type="text" name="query" id="query" /></label>
@@ -309,6 +312,7 @@ function main_page() {
             <div id="result-container"></div>
         </fieldset>
     </form>
+    <div id="user-info"><?php echo $_SESSION['user']['username'] ?> / <a href="?r=logout">Log out</a></div>
 <?php
     html_footer();
 }
