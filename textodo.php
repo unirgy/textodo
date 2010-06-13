@@ -189,6 +189,8 @@ $(document).ready(function() {
         }
     }
 
+    $('#search-form,#result-form').submit(function(e) { e.preventDefault(); return false; });
+
     setTimeout(submitQuery, queryRate);
     setTimeout(submitChanges, changesRate);
 
@@ -203,30 +205,31 @@ $(document).ready(function() {
                 linesChanged = {};
                 $('#result-container input').each(function (idx) {
                     linesCache[this.name] = this.value;
-                }).keydown(function (e) {
-                    e.preventDefault();
-                    switch (e.keyCode) {
-                    case 38:
-                        var li = $(e.target).parent('li');
-                        if (!li.is(':first-child')) {
-                            li.prev().children('input').focus();
-                        } else {
-                            $('#query').focus();
-                        }
-                        break;
-
-                    case 40: case 13:
-                        var li = $(e.target).parent('li');
-                        if (!li.is(':last-child')) {
-                            li.next().children('input').focus();
-                        }
-                        break;
-                    }
-                });
+                }).keydown(observeLineKeyDown);
                 setTimeout(submitQuery, queryRate);
             });
         } else {
             setTimeout(submitQuery, queryRate);
+        }
+    }
+
+    function observeLineKeyDown(e) {
+        switch (e.keyCode) {
+        case 38:
+            var li = $(e.target).parent('li');
+            if (!li.is(':first-child')) {
+                li.prev().children('input').focus();
+            } else {
+                $('#query').focus();
+            }
+            break;
+
+        case 40: case 13:
+            var li = $(e.target).parent('li');
+            if (!li.is(':last-child')) {
+                li.next().children('input').focus();
+            }
+            break;
         }
     }
 
@@ -254,7 +257,9 @@ $(document).ready(function() {
                     delete linesCache[i];
                     if (lineEl.val()!='' && lineEl.parent('li').is(':last-child')) {
                         newLineId--;
-                        lineEl.parent('li').after('<li><input class="new-line" type="text" name="line['+newLineId+']" value="" /></li>');
+                        newLineEl = $('<li><input class="new-line" type="text" name="line['+newLineId+']" value="" /></li>');
+                        newLineEl.children('input').keydown(observeLineKeyDown);
+                        lineEl.parent('li').after(newLineEl);
                         linesCache['line['+newLineId+']'] = '';
                     }
                 }
