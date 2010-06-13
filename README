@@ -40,6 +40,14 @@ INSERT INTO `textodo_user` (`username`, `passhash`) VALUES ('demo', md5('demo'))
 
 * Works well with Android and iPhone browsers.
 
+* No buttons, data save is automatic
+
+* Special Syntax:
+
+** Priority:
+^1 ^100 - Lines will be shown BEFORE unprioritized lines, lower number on top
+^-1 ^-100 - Lines will be shown AFTER unprioritized lines, lower number on top
+
 * Filter Examples:
 
 Term - single term search

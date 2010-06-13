@@ -124,7 +124,7 @@ function fetch_lines() {
         $where = join(" AND ", $whereArr);
     }
     echo '<ul>';
-    $result = mysqli_query($db, "SELECT * FROM textodo_lines WHERE user_id=".(int)$_SESSION['user']['id'].(!empty($where) ? " and (".$where.")" : "")." order by ifnull(priority, 32000)");
+    $result = mysqli_query($db, "SELECT * FROM textodo_lines WHERE user_id=".(int)$_SESSION['user']['id'].(!empty($where) ? " and (".$where.")" : "")." order by ifnull(priority, 10000)");
     while ($row = mysqli_fetch_assoc($result)) {
         echo '<li><input type="text" name="line['.$row['id'].']" value="'.htmlspecialchars($row['line']).'" /></li>';
     }
@@ -140,6 +140,9 @@ function apply_updates() {
     $newIds = array('"newLineId":'.$newLineId);
     foreach ($_POST['line'] as $id=>$line) {
         $priority = preg_match('#(^| )\\^([0-9]+)\\b#', $line, $m) ? (int)$m[2] : 'null';
+        if ($priority<0) {
+            $priority = 10000-$priority;
+        }
         if ($id<=0) { // new
             mysqli_query($db, "INSERT INTO textodo_lines (user_id, line, priority) VALUES ('".(int)$_SESSION['user']['id']."','".addslashes($line)."', {$priority})");
             $newIds[] = '"line['.$id.']":"line['.mysqli_insert_id($db).']"';
