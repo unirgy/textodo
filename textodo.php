@@ -215,7 +215,7 @@ $(document).ready(function() {
                         }
                         break;
 
-                    case 40:
+                    case 40: case 13:
                         var li = $(e.target).parent('li');
                         if (!li.is(':last-child')) {
                             li.next().children('input').focus();
@@ -280,8 +280,8 @@ function login_form() {
 <?php endif ?>
     <form method="post">
         <fieldset>
-            <label for="username">User name: <br /><input name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label><br/>
-            <label for="password">Password: <br /><input name="password" value="" /></label><br />
+            <label for="username">User name: <br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label><br/>
+            <label for="password">Password: <br /><input type="password" name="password" value="" /></label><br />
             <input type="submit" value="Login" />
         </fieldset>
     </form>
