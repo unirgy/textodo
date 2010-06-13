@@ -16,6 +16,7 @@
  * @package    Textodo
  * @copyright  Copyright (c) 2010 Unirgy LLC (http://www.unirgy.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @version    0.2.0
  */
 
 /************** CONFIGURATION *****************/
@@ -123,7 +124,7 @@ function fetch_lines() {
         $where = join(" AND ", $whereArr);
     }
     echo '<ul>';
-    $result = mysqli_query($db, "SELECT * FROM textodo_lines WHERE user_id=".(int)$_SESSION['user']['id'].(!empty($where) ? " and (".$where.")" : ""));
+    $result = mysqli_query($db, "SELECT * FROM textodo_lines WHERE user_id=".(int)$_SESSION['user']['id'].(!empty($where) ? " and (".$where.")" : "")." order by ifnull(priority, 32000)");
     while ($row = mysqli_fetch_assoc($result)) {
         echo '<li><input type="text" name="line['.$row['id'].']" value="'.htmlspecialchars($row['line']).'" /></li>';
     }
@@ -138,15 +139,16 @@ function apply_updates() {
     $db = db_connect();
     $newIds = array('"newLineId":'.$newLineId);
     foreach ($_POST['line'] as $id=>$line) {
+        $priority = preg_match('#(^| )\\^([0-9]+)\\b#', $line, $m) ? (int)$m[2] : 'null';
         if ($id<=0) { // new
-            mysqli_query($db, "INSERT INTO textodo_lines (user_id, line) VALUES ('".(int)$_SESSION['user']['id']."','".addslashes($line)."')");
+            mysqli_query($db, "INSERT INTO textodo_lines (user_id, line, priority) VALUES ('".(int)$_SESSION['user']['id']."','".addslashes($line)."', {$priority})");
             $newIds[] = '"line['.$id.']":"line['.mysqli_insert_id($db).']"';
         } elseif ($line=='') { // delete
             mysqli_query($db, "DELETE FROM textodo_lines WHERE id='".(int)$id."'");
             $newLineId--;
             $newIds[] = '"line['.$id.']":"line['.$newLineId.']"';
         } else { // update
-            mysqli_query($db, "UPDATE textodo_lines SET line='".addslashes($line)."' where id='".(int)$id."'");
+            mysqli_query($db, "UPDATE textodo_lines SET line='".addslashes($line)."', `priority`={$priority} where id='".(int)$id."'");
         }
     }
     echo '{'.join(',', $newIds).'}';
@@ -160,6 +162,7 @@ function html_header() {
 <!DOCTYPE html>
 <html>
 <head>
+    <title>TEXTODO</title>
     <style type="text/css">
 .error-msg { border:solid 1px #F00; background:#FCC; padding:5px; }
 
@@ -171,7 +174,7 @@ fieldset { border:0; }
 #query { width:200px; border:solid 1px #888; }
 
 #result-form ul { list-style-type:none; margin:0; padding:0; }
-#result-form input { border-style:dotted; border-color:#888; border-width:0 0 1px 0; width:100%; }
+#result-form input { border-style:dotted; border-color:#888; border-width:0 0 1px 0; width:100%; line-height:1.5em; height:1.5em; margin:0; }
 /*#result-form input.new-line { background:#DDD; }*/
 
 #user-info { text-align:center; }
@@ -289,8 +292,8 @@ function login_form() {
 <?php endif ?>
     <form id="login-form" method="post">
         <fieldset>
-            <p><label for="username">User name: <br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label></p>
-            <p><label for="password">Password: <br /><input type="password" name="password" value="" /></label></p>
+            <p><label for="username">User name:<br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label></p>
+            <p><label for="password">Password:<br /><input type="password" name="password" value="" /></label></p>
             <p><input type="submit" value="Login" /></p>
         </fieldset>
     </form>
@@ -303,7 +306,7 @@ function main_page() {
 ?>
     <form id="search-form">
         <fieldset>
-            <label for="query">Filter: <input type="text" name="query" id="query" /></label>
+            <label for="query">Filter:&nbsp;<input type="text" name="query" id="query" /></label>
         </fieldset>
     </form>
 

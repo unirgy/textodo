@@ -17,7 +17,9 @@ CREATE TABLE `textodo_lines` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT(10) UNSIGNED NOT NULL,
   `line` TEXT,
-  PRIMARY KEY (`id`)
+  `priority` SMALLINT NULL,
+  PRIMARY KEY (`id`),
+  KEY `priority` (`priority`)
 );
 
 CREATE TABLE `textodo_user` (
@@ -54,3 +56,11 @@ http://unirgy.com/t
 
 Username: demo
 Password: demo
+
+===== Changelog =====
+
+0.1.0
+Initial release
+
+0.2.0
+Added lines.priority
