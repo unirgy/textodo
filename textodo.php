@@ -204,7 +204,7 @@ $(document).ready(function() {
                 $('#result-container input').each(function (idx) {
                     linesCache[this.name] = this.value;
                 }).keydown(function (e) {
-                    //e.preventDefault();
+                    e.preventDefault();
                     switch (e.keyCode) {
                     case 38:
                         var li = $(e.target).parent('li');
