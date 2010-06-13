@@ -287,7 +287,7 @@ function login_form() {
 <?php if (!empty($_REQUEST['error'])): ?>
     <div class="error-msg"><?php echo htmlspecialchars($_REQUEST['error']) ?></div>
 <?php endif ?>
-    <form name="login-form" method="post">
+    <form id="login-form" method="post">
         <fieldset>
             <p><label for="username">User name: <br /><input type="text" name="username" value="<?php echo !empty($_COOKIE[$cookieName]) ? htmlspecialchars($_COOKIE[$cookieName]) : '' ?>" /></label></p>
             <p><label for="password">Password: <br /><input type="password" name="password" value="" /></label></p>
