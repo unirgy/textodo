@@ -139,7 +139,7 @@ function apply_updates() {
     $db = db_connect();
     $newIds = array('"newLineId":'.$newLineId);
     foreach ($_POST['line'] as $id=>$line) {
-        $priority = preg_match('#(^| )\\^([0-9]+)\\b#', $line, $m) ? (int)$m[2] : 'null';
+        $priority = preg_match('#(^| )\\^(-?[0-9]+)\\b#', $line, $m) ? (int)$m[2] : 'null';
         if ($priority<0) {
             $priority = 10000-$priority;
         }
